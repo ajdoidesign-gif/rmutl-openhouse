@@ -3,25 +3,143 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary: #1A1A2E;
+  --accent: #E94560;
+  --secondary: #F5A623;
+  --cream: #F8F4EF;
+  --text-main: #2D2D2D;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    box-sizing: border-box;
   }
-}
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  body {
+    color: var(--text-main);
+    background: var(--cream);
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-playfair), serif;
+  }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  .glass {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .glass-dark {
+    background: rgba(26, 26, 46, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* ─── Animation keyframes ──────────────────────────────── */
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-16px); }
+}
+
+@keyframes float-md {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes spin-reverse {
+  from { transform: rotate(360deg); }
+  to   { transform: rotate(0deg); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50%       { opacity: 0.9; transform: scale(1.06); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Animation utility classes ────────────────────────── */
+
+.animate-float          { animation: float    6s ease-in-out infinite; }
+.animate-float-md       { animation: float-md 8s ease-in-out infinite; }
+.animate-float-delayed  { animation: float    7s ease-in-out 2s infinite; }
+.animate-spin-slow      { animation: spin-slow    25s linear infinite; }
+.animate-spin-reverse   { animation: spin-reverse 18s linear infinite; }
+.animate-pulse-glow     { animation: pulse-glow 4s ease-in-out infinite; }
+.animate-fadeInUp       { animation: fadeInUp 0.7s ease-out both; }
+
+/* ─── SVG path draw animation (triggered by .is-visible) ── */
+
+@keyframes draw-path {
+  from { stroke-dashoffset: 350; }
+  to   { stroke-dashoffset: 0; }
+}
+
+.animate-draw-path {
+  stroke-dasharray: 350;
+  stroke-dashoffset: 350;
+  animation: draw-path 1.4s cubic-bezier(0.4, 0, 0.2, 1) 0.15s both;
+  animation-play-state: paused;
+}
+
+.is-visible .animate-draw-path {
+  animation-play-state: running;
+}
+
+/* ─── Scroll reveal ─────────────────────────────────────── */
+
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.65s ease-out, transform 0.65s ease-out;
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Respect prefers-reduced-motion ───────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float,
+  .animate-float-md,
+  .animate-float-delayed,
+  .animate-spin-slow,
+  .animate-spin-reverse,
+  .animate-pulse-glow,
+  .animate-fadeInUp,
+  .animate-bounce {
+    animation: none !important;
+  }
+
+  .reveal-on-scroll {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }
