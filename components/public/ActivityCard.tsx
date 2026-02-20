@@ -50,8 +50,6 @@ export default function ActivityCard({ activity, index = 0 }: Props) {
           className="absolute inset-y-0 w-1/2 pointer-events-none z-20 -translate-x-full group-hover/card:translate-x-[280%] transition-transform duration-700 ease-in-out"
           style={{
             background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent)',
-            transform: undefined,
-            skewX: undefined,
           }}
           aria-hidden="true"
         >
